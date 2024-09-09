@@ -1,11 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _LoginScreenState createState() => _LoginScreenState();
 }
 
@@ -39,24 +41,26 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // On submit function
-  void _submit() {
+  Future<void> _submit() async {
     if (_formKey.currentState?.validate() ?? false) {
       // If the form is valid, proceed with login logic
+
+      await signInWithEmail(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Logging in...')),
+        const SnackBar(content: Text('Logging in...')),
       );
+
       // Implement login logic here
     }
   }
 
   showOrHidePasswordVisibility() {
-    setState((){
-      viewPassword= !viewPassword;
-
+    setState(() {
+      viewPassword = !viewPassword;
     });
   }
 
-bool viewPassword=false;
+  bool viewPassword = false;
 
   signInWithEmail(context) async {
     try {
@@ -64,21 +68,18 @@ bool viewPassword=false;
         email: _emailController.text,
         password: _passwordController.text,
       );
-
     } on FirebaseAuthException catch (e) {
       debugPrint('error------${e.stackTrace}');
       debugPrint('stack--------${e.code}');
-
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
+      appBar: AppBar(title: const Text('Login')),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -86,21 +87,21 @@ bool viewPassword=false;
             children: <Widget>[
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
                 keyboardType: TextInputType.emailAddress,
                 validator: validateEmail,
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: const InputDecoration(labelText: 'Password'),
                 obscureText: true,
                 validator: validatePassword,
               ),
-              SizedBox(height: 32.0),
+              const SizedBox(height: 32.0),
               ElevatedButton(
                 onPressed: _submit,
-                child: Text('Login'),
+                child: const Text('Login'),
               ),
             ],
           ),
@@ -108,6 +109,4 @@ bool viewPassword=false;
       ),
     );
   }
-
 }
-

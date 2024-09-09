@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
 }
 
@@ -33,7 +35,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     if (_formKey.currentState?.validate() ?? false) {
       // If the form is valid, proceed with reset password logic
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Reset link sent to your email')),
+        const SnackBar(content: Text('Reset link sent to your email')),
       );
       // Implement forgot password logic here
     }
@@ -42,29 +44,29 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Forgot Password')),
+      appBar: AppBar(title: const Text('Forgot Password')),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text(
+              const Text(
                 'Enter your email to reset your password',
                 style: TextStyle(fontSize: 18.0),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
                 keyboardType: TextInputType.emailAddress,
                 validator: validateEmail,
               ),
-              SizedBox(height: 32.0),
+              const SizedBox(height: 32.0),
               ElevatedButton(
                 onPressed: _submit,
-                child: Text('Send Reset Link'),
+                child: const Text('Send Reset Link'),
               ),
             ],
           ),
@@ -72,10 +74,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
     );
   }
-  hitForgetAPI(context) async {
-    QuerySnapshot querySnapshot = await databaseReference.collection("user_auth").where("email", isEqualTo: _emailController.text).get();
-    if (querySnapshot.docs.isEmpty) {
 
+  hitForgetAPI(context) async {
+    QuerySnapshot querySnapshot = await databaseReference
+        .collection("user_auth")
+        .where("email", isEqualTo: _emailController.text)
+        .get();
+    if (querySnapshot.docs.isEmpty) {
       print('No user found');
     } else {
       try {
@@ -90,26 +95,31 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               return AlertDialog(
                 surfaceTintColor: Colors.transparent,
                 backgroundColor: Colors.white,
-                title: Text(
+                title: const Text(
                   'Check Your Inbox',
-                  style: TextStyle(fontSize: 17, ),
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
                 ),
-                content: Text('A password reset link has been sent to your email address. Please check your inbox.',
-                    style: TextStyle(fontSize: 14, )),
+                content: const Text(
+                    'A password reset link has been sent to your email address. Please check your inbox.',
+                    style: TextStyle(
+                      fontSize: 14,
+                    )),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('OK'),
+                    child: const Text('OK'),
                   ),
                 ],
               );
             },
           );
-        }).onError((error, stackTrace) {
-        });
+        }).onError((error, stackTrace) {});
       } on FirebaseAuthException catch (e) {
+        debugPrint(e.toString());
       }
     }
   }

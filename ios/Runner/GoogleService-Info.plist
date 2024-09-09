@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>832121767989-6rt9jhole1le1v76n1qe0riifuf1jgtr.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.832121767989-6rt9jhole1le1v76n1qe0riifuf1jgtr</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>832121767989-295kn51kfae78atb51v6ug2anc9g55r3.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBkeGZi1jeegvD7IJ1kM2JkR3AVCYjDKx8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>832121767989</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.giphyAppTest</string>
+	<key>PROJECT_ID</key>
+	<string>giphy-app-test</string>
+	<key>STORAGE_BUCKET</key>
+	<string>giphy-app-test.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:832121767989:ios:feffa972925c0d023e497c</string>
+</dict>
+</plist>
