@@ -1,11 +1,13 @@
-class GifDataModel {
+import '../model/base_model.dart';
+
+class GifDataEntity extends BaseModel {
   List<Data>? data;
   Meta? meta;
   Pagination? pagination;
 
-  GifDataModel({this.data, this.meta, this.pagination});
+  GifDataEntity({this.data, this.meta, this.pagination});
 
-  GifDataModel.fromJson(Map<String, dynamic> json) {
+  GifDataEntity.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {

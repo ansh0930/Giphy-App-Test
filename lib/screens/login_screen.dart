@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:giphy_app_test/screens/trending_screen.dart';
 
 import '../main.dart';
 
@@ -46,6 +47,10 @@ class _LoginScreenState extends State<LoginScreen> {
       // If the form is valid, proceed with login logic
 
       await signInWithEmail(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const TrendingPage()),
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Logging in...')),
       );

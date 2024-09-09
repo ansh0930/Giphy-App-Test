@@ -67,4 +67,5 @@ class DefaultFirebaseOptions {
     iosClientId: '832121767989-6rt9jhole1le1v76n1qe0riifuf1jgtr.apps.googleusercontent.com',
     iosBundleId: 'com.example.giphyAppTest',
   );
+
 }

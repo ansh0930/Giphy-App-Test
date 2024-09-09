@@ -5,11 +5,17 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:giphy_app_test/screens/register_screen.dart';
+import 'package:provider/provider.dart';
+import 'data/model/gif_data_model.dart';
+import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart' as AT;
+import 'data/model/base_model.dart';
+import 'screens/trending_screen.dart';
 
 var randomNumber;
 
 FirebaseAuth auth = FirebaseAuth.instance;
-Stream<User?> authUser = FirebaseAuth.instance.authStateChanges();
+// Stream<AT.User?>? authUser= FirebaseAuth.instance.authStateChanges();
 FirebaseFirestore databaseReference = FirebaseFirestore.instance;
 FirebaseStorage dbStorage = FirebaseStorage.instance;
 var deviceToken;
@@ -23,14 +29,12 @@ Future<void> main() async {
 initializationFunction() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: const FirebaseOptions(
-    apiKey: 'AIzaSyDh5L6sFsCCYvH-xXrw_CvBEarAAmRZ67g',
-    appId: '1:832121767989:android:7a50a98a7e6e32063e497c',
-    messagingSenderId: '',
-    projectId: 'giphy-app-test',
-    storageBucket: 'giphy-app-test.appspot.com',
-  ));
-  debugPrint('deviceToken::$deviceToken');
+    name: 'default',
+    demoProjectId: 'giphy-app-test',
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).catchError((onError) {
+    print("ERROR :- $onError");
+  });
 }
 
 orientation() {
@@ -45,7 +49,14 @@ orientation() {
 }
 
 initApp() async {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<BaseModel>(
+      create: (_) => BaseModel(),
+    ),
+    ChangeNotifierProvider<GiphsModel>(
+      create: (_) => GiphsModel(),
+    ),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -59,7 +70,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SignUpScreen(),
+      home: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.data != null) return const TrendingPage();
+            return const SignUpScreen();
+          }),
     );
   }
 }

@@ -37,6 +37,13 @@
             {
               "client_id": "832121767989-518436tlv5e80g1tr7htgb0r0fu47lsb.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "832121767989-6rt9jhole1le1v76n1qe0riifuf1jgtr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.giphyAppTest"
+              }
             }
           ]
         }
