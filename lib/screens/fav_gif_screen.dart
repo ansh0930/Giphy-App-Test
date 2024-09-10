@@ -71,8 +71,7 @@ class _FavGifScreenState extends State<FavGifScreen> {
               ),
             ));
           }
-
-          if (snapshot.data!.size > 0) {
+          if (snapshot.data!.size != 0) if (snapshot.data!.docs!.isNotEmpty) {
             children.clear();
 
             snapshot.data!.docs.forEach((element) => giphyQuery.data

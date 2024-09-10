@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../entity/gif_data_entity.dart';
 import 'package:firebase_auth/firebase_auth.dart' as AT;
@@ -9,7 +8,7 @@ import 'base_model.dart';
 import 'package:http/http.dart' as http;
 
 const baseUrl = 'http://api.giphy.com/v1';
-const apiKey = 'OJGGdBnlo0s9qkQLWv6QAQiIK3WNfOn2';
+const apiKey = 'Y7u8CM4FTZTUW0VyEcOXv4tLaEOGR0aO';
 const giphsPerPage = 5;
 const maxNofOfssets = 100;
 
