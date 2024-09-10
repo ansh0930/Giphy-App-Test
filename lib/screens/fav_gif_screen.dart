@@ -53,7 +53,7 @@ class _FavGifScreenState extends State<FavGifScreen> {
         stream: GiphsModel().fetchFavGif(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           var children = <Widget>[];
-          int index = 0;
+
           GifDataEntity? giphyQuery = GifDataEntity(data: []);
           if (snapshot.hasError) {
             return const Text('Something went wrong try again');
@@ -63,48 +63,52 @@ class _FavGifScreenState extends State<FavGifScreen> {
               child: CircularProgressIndicator(),
             );
           }
-          if (snapshot.data!.size == 0) {
-            children.add(SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: const Center(
-                child: Text("No favorites data found."),
-              ),
-            ));
-          }
-          if (snapshot.data!.size != 0) if (snapshot.data!.docs!.isNotEmpty) {
-            children.clear();
 
-            snapshot.data!.docs.forEach((element) => giphyQuery.data
-                ?.add(Data.fromJson(jsonDecode(element['gif']))));
+          if (snapshot.data != null) {
+            if (snapshot.data!.size == 0) {
+              children.add(SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: const Center(
+                  child: Text("No favorites data found."),
+                ),
+              ));
+            }
+            if (snapshot.data!.size != 0) if (snapshot.data!.docs!.isNotEmpty) {
+              children.clear();
 
-            for (var element in giphyQuery.data!) {
-              if (element.images?.original?.webp != null) {
-                children.add(Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 1, vertical: 5),
-                    child: SizedBox(
-                        height: double.parse(
-                            element.images!.fixedHeightDownsampled!.height!),
-                        child: GestureDetector(
-                            child: ImageLoader(
-                              imageUrl:
-                                  element.images!.fixedHeightDownsampled!.url!,
-                            ),
-                            onTap: () => {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => FullImageScreen(
-                                              gifData: element,
-                                            )),
-                                  )
-                                }))));
-              } else {
-                children.add(const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                    child: Center(
-                        child:
-                            Text('This Gif is not available at the moment'))));
+              snapshot.data!.docs.forEach((element) => giphyQuery.data
+                  ?.add(Data.fromJson(jsonDecode(element['gif']))));
+
+              for (var element in giphyQuery.data!) {
+                if (element.images?.original?.webp != null) {
+                  children.add(Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 1, vertical: 5),
+                      child: SizedBox(
+                          height: double.parse(
+                              element.images!.fixedHeightDownsampled!.height!),
+                          child: GestureDetector(
+                              child: ImageLoader(
+                                imageUrl: element
+                                    .images!.fixedHeightDownsampled!.url!,
+                              ),
+                              onTap: () => {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => FullImageScreen(
+                                                gifData: element,
+                                              )),
+                                    )
+                                  }))));
+                } else {
+                  children.add(const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                      child: Center(
+                          child: Text(
+                              'This Gif is not available at the moment'))));
+                }
               }
             }
           }
