@@ -4,18 +4,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:giphy_app_test/screens/register_screen.dart';
+import 'package:giphy_app_test/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'data/model/gif_data_model.dart';
 import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart' as AT;
 import 'data/model/base_model.dart';
-import 'screens/trending_screen.dart';
+import 'screens/fav_gif_screen.dart';
 
 var randomNumber;
 
 FirebaseAuth auth = FirebaseAuth.instance;
-// Stream<AT.User?>? authUser= FirebaseAuth.instance.authStateChanges();
+// Stream<AT.User?>? authUser;
 FirebaseFirestore databaseReference = FirebaseFirestore.instance;
 FirebaseStorage dbStorage = FirebaseStorage.instance;
 var deviceToken;
@@ -28,13 +27,13 @@ Future<void> main() async {
 
 initializationFunction() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    name: 'default',
-    demoProjectId: 'giphy-app-test',
-    options: DefaultFirebaseOptions.currentPlatform,
-  ).catchError((onError) {
-    print("ERROR :- $onError");
-  });
+  try {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    // authUser = FirebaseAuth.instance.authStateChanges();
+  } catch (e) {
+    debugPrint(e.toString());
+  }
 }
 
 orientation() {
@@ -65,18 +64,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Photo Sharing app',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.data != null) return const TrendingPage();
-            return const SignUpScreen();
-          }),
-    );
+        title: 'Photo Sharing app',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: SplashScreen());
   }
 }
 

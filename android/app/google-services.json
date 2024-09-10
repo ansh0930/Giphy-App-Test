@@ -1,45 +1,37 @@
 {
   "project_info": {
-    "project_number": "832121767989",
-    "project_id": "giphy-app-test",
-    "storage_bucket": "giphy-app-test.appspot.com"
+    "project_number": "689387392048",
+    "project_id": "giphy-app-7a465",
+    "storage_bucket": "giphy-app-7a465.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:832121767989:android:7a50a98a7e6e32063e497c",
+        "mobilesdk_app_id": "1:689387392048:android:ff05761dbbf3e4933c31f5",
         "android_client_info": {
           "package_name": "com.app.giphy"
         }
       },
       "oauth_client": [
         {
-          "client_id": "832121767989-295kn51kfae78atb51v6ug2anc9g55r3.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.app.giphy",
-            "certificate_hash": "c06cefadd8b5109a48e05651e401d2483992003c"
-          }
-        },
-        {
-          "client_id": "832121767989-518436tlv5e80g1tr7htgb0r0fu47lsb.apps.googleusercontent.com",
+          "client_id": "689387392048-ffbdbtr7212enetsv5cv88qp3jmlvnh4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDh5L6sFsCCYvH-xXrw_CvBEarAAmRZ67g"
+          "current_key": "AIzaSyCdOebdk3lp6vOgQWnloHNRcIYyo6PF-dQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "832121767989-518436tlv5e80g1tr7htgb0r0fu47lsb.apps.googleusercontent.com",
+              "client_id": "689387392048-ffbdbtr7212enetsv5cv88qp3jmlvnh4.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "832121767989-6rt9jhole1le1v76n1qe0riifuf1jgtr.apps.googleusercontent.com",
+              "client_id": "689387392048-5b5g3ld4t4qqmeo2os1m41ei82q7leac.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.giphyAppTest"

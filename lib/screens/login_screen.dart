@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:giphy_app_test/screens/trending_screen.dart';
+import 'package:giphy_app_test/screens/fav_gif_screen.dart';
 
 import '../main.dart';
+import 'trending_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // If the form is valid, proceed with login logic
 
       await signInWithEmail(context);
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const TrendingPage()),
       );

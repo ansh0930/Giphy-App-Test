@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:giphy_app_test/screens/fav_gif_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -11,14 +10,14 @@ import '../data/entity/gif_data_entity.dart';
 import '../data/model/base_model.dart';
 import '../data/model/gif_data_model.dart';
 
-class TrendingPage extends StatefulWidget {
-  const TrendingPage({super.key});
+class FavGifScreen extends StatefulWidget {
+  const FavGifScreen({super.key});
 
   @override
-  State<TrendingPage> createState() => _TrendingPageState();
+  State<FavGifScreen> createState() => _FavGifScreenState();
 }
 
-class _TrendingPageState extends State<TrendingPage> {
+class _FavGifScreenState extends State<FavGifScreen> {
   // late Future<GiphyTrending> giphyTrendingAlbum;
   // late Future<GiphyTrending> giphySearchAlbum;
   late ScrollController scrollController;
@@ -114,92 +113,68 @@ class _TrendingPageState extends State<TrendingPage> {
       }
 
       return Scaffold(
-          appBar: AppBar(
-            actions: [
-              TextButton(
-                  child: const Text(
-                    'Trending',
-                    style: TextStyle(color: clearButtontextColor),
-                  ),
-                  onPressed: () {
-                    isSearchQuery = false;
-                    scrollController.jumpTo(0);
-                  }),
-            ],
-            title: TextField(
-              onChanged: (value) {
-                isSearchQuery = true;
-                searchQuery = value;
-                model.searchImages(value);
-                scrollController.jumpTo(0);
-              },
-            ),
-            backgroundColor: const Color.fromARGB(170, 255, 255, 255),
-            centerTitle: true,
-            // onSearch: (value) {
-
-            // },
+        appBar: AppBar(
+          actions: [
+            TextButton(
+                child: const Text(
+                  'Favorite',
+                  style: TextStyle(color: clearButtontextColor),
+                ),
+                onPressed: () {
+                  isSearchQuery = false;
+                  scrollController.jumpTo(0);
+                }),
+          ],
+          title: TextField(
+            onChanged: (value) {
+              isSearchQuery = true;
+              searchQuery = value;
+              model.searchImages(value);
+              scrollController.jumpTo(0);
+            },
           ),
-          body: Stack(
-            children: [
-              Center(
-                  // Center is a layout widget. It takes a single child and positions it
-                  // in the middle of the parent.
-                  child: ListView(
-                      shrinkWrap: true,
-                      controller: scrollController,
-                      children: [
-                    Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            // alignment : Alignment.topLeft,
-                            child: isSearchQuery
-                                ? Text('Search : $searchQuery')
-                                : RichText(
-                                    overflow: TextOverflow.visible,
-                                    maxLines: 4,
-                                    text: TextSpan(
-                                        text: 'Whats trending\n',
-                                        style: trendingScreenHeading,
-                                        children: [
-                                          TextSpan(
-                                              text:
-                                                  ' ${DateFormat('dd MMMM').format(DateTime.now())}',
-                                              style: trendingScreenSubHeading),
-                                        ]),
-                                  ))),
-                    model.loadingStatus == LoadingStatusE.idle
-                        ? Column(children: children)
-                        : // By default, show a loading spinner.
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height,
-                            child: const LinearProgressIndicator()),
-                  ])),
-              Positioned(
-                  bottom: 10,
-                  right: 10,
-                  child: GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => FavGifScreen()),
-                    ),
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      direction: Axis.vertical,
-                      children: [
-                        Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                          size: 50,
-                        ),
-                        Text("Favorite")
-                      ],
-                    ),
-                  ))
-            ],
-          ));
+          backgroundColor: const Color.fromARGB(170, 255, 255, 255),
+          centerTitle: true,
+          // onSearch: (value) {
+
+          // },
+        ),
+        body: Center(
+            // Center is a layout widget. It takes a single child and positions it
+            // in the middle of the parent.
+            child: ListView(
+                shrinkWrap: true,
+                controller: scrollController,
+                children: [
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      // alignment : Alignment.topLeft,
+                      child: isSearchQuery
+                          ? Text('Search : $searchQuery')
+                          : RichText(
+                              overflow: TextOverflow.visible,
+                              maxLines: 4,
+                              text: TextSpan(
+                                  text: 'Favorite\n',
+                                  style: trendingScreenHeading,
+                                  children: [
+                                    TextSpan(
+                                        text:
+                                            ' ${DateFormat('dd MMMM').format(DateTime.now())}',
+                                        style: trendingScreenSubHeading),
+                                  ]),
+                            ))),
+              model.loadingStatus == LoadingStatusE.idle
+                  ? Column(children: children)
+                  : // By default, show a loading spinner.
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: const LinearProgressIndicator()),
+            ])),
+      );
     });
   }
 }

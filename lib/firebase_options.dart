@@ -50,21 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDh5L6sFsCCYvH-xXrw_CvBEarAAmRZ67g',
-    appId: '1:832121767989:android:7a50a98a7e6e32063e497c',
-    messagingSenderId: '832121767989',
-    projectId: 'giphy-app-test',
-    storageBucket: 'giphy-app-test.appspot.com',
+    apiKey: 'AIzaSyCdOebdk3lp6vOgQWnloHNRcIYyo6PF-dQ',
+    appId: '1:689387392048:android:ff05761dbbf3e4933c31f5',
+    messagingSenderId: '689387392048',
+    projectId: 'giphy-app-7a465',
+    storageBucket: 'giphy-app-7a465.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBkeGZi1jeegvD7IJ1kM2JkR3AVCYjDKx8',
-    appId: '1:832121767989:ios:feffa972925c0d023e497c',
-    messagingSenderId: '832121767989',
-    projectId: 'giphy-app-test',
-    storageBucket: 'giphy-app-test.appspot.com',
-    androidClientId: '832121767989-295kn51kfae78atb51v6ug2anc9g55r3.apps.googleusercontent.com',
-    iosClientId: '832121767989-6rt9jhole1le1v76n1qe0riifuf1jgtr.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDxAxMbnvS8V2sUJhmTJKUUIviLdco_Qkc',
+    appId: '1:689387392048:ios:e74b92c71989a5dc3c31f5',
+    messagingSenderId: '689387392048',
+    projectId: 'giphy-app-7a465',
+    storageBucket: 'giphy-app-7a465.appspot.com',
+    iosClientId: '689387392048-5b5g3ld4t4qqmeo2os1m41ei82q7leac.apps.googleusercontent.com',
     iosBundleId: 'com.example.giphyAppTest',
   );
 

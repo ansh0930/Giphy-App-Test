@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:giphy_app_test/screens/login_screen.dart';
-import 'package:giphy_app_test/screens/trending_screen.dart';
+import 'package:giphy_app_test/screens/fav_gif_screen.dart';
 
 import '../main.dart';
+import 'trending_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -42,7 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ); // userCredential.user!.sendEmailVerification();
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Register successfully.")));
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const TrendingPage()),
       );

@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../entity/gif_data_entity.dart';
+import 'package:firebase_auth/firebase_auth.dart' as AT;
 import 'base_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,9 +14,12 @@ const maxNofOfssets = 100;
 class GiphsModel extends BaseModel {
   GifDataEntity? giphyTrendingAlbum;
   GifDataEntity? giphySearchAlbum;
-
+  // AT.User? user;
   int offset = 0;
   int limit = giphsPerPage;
+  static FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static AT.FirebaseAuth _auth = AT.FirebaseAuth.instance;
+  static AT.User get user => _auth.currentUser!;
 
   fetchTrendingImages() async {
     loadingStatus = LoadingStatusE.busy;
@@ -54,5 +60,16 @@ class GiphsModel extends BaseModel {
     notifyListeners();
   }
 
-  GiphsModel();
+  addFav(String gif) {
+    FirebaseFirestore.instance
+        .collection('fav_gaphy')
+        .add({'user_email': user.email, 'gif': gif});
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> fetchFavGif() {
+    return FirebaseFirestore.instance
+        .collection('fav_gaphy')
+        .where('user_email', isEqualTo: user.email)
+        .snapshots();
+  }
 }
