@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -28,16 +31,16 @@ class _FavGifScreenState extends State<FavGifScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<GiphsModel>().fetchTrendingImages();
+    context.read<GiphsModel>().fetchFavGif();
     scrollController = ScrollController(keepScrollOffset: true);
     scrollController.addListener(() async {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         showButtomLoader = true;
-        if (context.read<GiphsModel>().offset <= maxNofOfssets) {
-          // on bottom scroll API Call until last page
-          context.read<GiphsModel>().fetchTrendingImages();
-        }
+        // if (context.read<GiphsModel>().offset <= maxNofOfssets) {
+        //   // on bottom scroll API Call until last page
+        //   // context.read<GiphsModel>().fetchTrendingImages();
+        // }
       } else {
         showButtomLoader = false;
       }
@@ -46,135 +49,85 @@ class _FavGifScreenState extends State<FavGifScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GiphsModel>(builder: (context, model, child) {
-      var children = <Widget>[];
-      int index = 0;
-      GifDataEntity? giphyQuery;
-      if (searchQuery == '') isSearchQuery = false;
-      if (isSearchQuery == true) {
-        giphyQuery = model.giphySearchAlbum;
-      } else {
-        giphyQuery = model.giphyTrendingAlbum;
-      }
-
-      if (giphyQuery != null) {
-        for (var element in giphyQuery.data!) {
-          index += 1;
-          // children.add(Center(
-          //     key: Key('index_$index'),
-
-          //     child: Container(
-          //         // margin: const EdgeInsets.all(200.0),
-          //         padding: const EdgeInsets.all(10),
-          //         decoration: const BoxDecoration(
-          //             // borderRadius : BorderRadius.circular(10),
-          //             color: Colors.white,
-          //             shape: BoxShape.circle),
-          //         child: Text(
-          //           '$index',
-          //           style: photoIndexBold,
-          //         ))));
-
-          if (element.images?.original?.webp != null) {
-            children.add(Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 5),
-                child: SizedBox(
-                    height: double.parse(
-                        element.images!.fixedHeightDownsampled!.height!),
-                    child: GestureDetector(
-                        child: ImageLoader(
-                          imageUrl:
-                              element.images!.fixedHeightDownsampled!.url!,
-                        ),
-                        onTap: () => {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FullImageScreen(
-                                          gifData: element,
-                                        )),
-                              )
-                            }))));
-          } else {
-            children.add(const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: Center(
-                    child: Text('This Gif is not available at the moment'))));
+    return StreamBuilder(
+        stream: GiphsModel().fetchFavGif(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          var children = <Widget>[];
+          int index = 0;
+          GifDataEntity? giphyQuery = GifDataEntity(data: []);
+          if (snapshot.hasError) {
+            return const Text('Something went wrong try again');
           }
-        }
-        showButtomLoader && !isSearchQuery
-            ? children.add(const Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: Center(
-                    child: CircularProgressIndicator(
-                  color: Colors.red,
-                ))))
-            : children.add(const SizedBox());
-      }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.data!.size == 0) {
+            children.add(SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: const Center(
+                child: Text("No favorites data found."),
+              ),
+            ));
+          }
 
-      return Scaffold(
-        appBar: AppBar(
-          actions: [
-            TextButton(
-                child: const Text(
-                  'Favorite',
-                  style: TextStyle(color: clearButtontextColor),
-                ),
-                onPressed: () {
-                  isSearchQuery = false;
-                  scrollController.jumpTo(0);
-                }),
-          ],
-          title: TextField(
-            onChanged: (value) {
-              isSearchQuery = true;
-              searchQuery = value;
-              model.searchImages(value);
-              scrollController.jumpTo(0);
-            },
-          ),
-          backgroundColor: const Color.fromARGB(170, 255, 255, 255),
-          centerTitle: true,
-          // onSearch: (value) {
+          if (snapshot.data!.size > 0) {
+            children.clear();
 
-          // },
-        ),
-        body: Center(
-            // Center is a layout widget. It takes a single child and positions it
-            // in the middle of the parent.
-            child: ListView(
+            snapshot.data!.docs.forEach((element) => giphyQuery.data
+                ?.add(Data.fromJson(jsonDecode(element['gif']))));
+
+            for (var element in giphyQuery.data!) {
+              if (element.images?.original?.webp != null) {
+                children.add(Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 1, vertical: 5),
+                    child: SizedBox(
+                        height: double.parse(
+                            element.images!.fixedHeightDownsampled!.height!),
+                        child: GestureDetector(
+                            child: ImageLoader(
+                              imageUrl:
+                                  element.images!.fixedHeightDownsampled!.url!,
+                            ),
+                            onTap: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FullImageScreen(
+                                              gifData: element,
+                                            )),
+                                  )
+                                }))));
+              } else {
+                children.add(const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    child: Center(
+                        child:
+                            Text('This Gif is not available at the moment'))));
+              }
+            }
+          }
+
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              title: const Text(
+                "Favorites",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              backgroundColor: appBarColor,
+              centerTitle: true,
+              // onSearch: (value) {
+
+              // },
+            ),
+            body: ListView(
                 shrinkWrap: true,
                 controller: scrollController,
-                children: [
-              Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      // alignment : Alignment.topLeft,
-                      child: isSearchQuery
-                          ? Text('Search : $searchQuery')
-                          : RichText(
-                              overflow: TextOverflow.visible,
-                              maxLines: 4,
-                              text: TextSpan(
-                                  text: 'Favorite\n',
-                                  style: trendingScreenHeading,
-                                  children: [
-                                    TextSpan(
-                                        text:
-                                            ' ${DateFormat('dd MMMM').format(DateTime.now())}',
-                                        style: trendingScreenSubHeading),
-                                  ]),
-                            ))),
-              model.loadingStatus == LoadingStatusE.idle
-                  ? Column(children: children)
-                  : // By default, show a loading spinner.
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: const LinearProgressIndicator()),
-            ])),
-      );
-    });
+                children: [Column(children: children)]),
+          );
+        });
   }
 }

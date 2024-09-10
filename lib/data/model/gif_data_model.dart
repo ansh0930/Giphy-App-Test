@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../entity/gif_data_entity.dart';
 import 'package:firebase_auth/firebase_auth.dart' as AT;
@@ -14,6 +16,7 @@ const maxNofOfssets = 100;
 class GiphsModel extends BaseModel {
   GifDataEntity? giphyTrendingAlbum;
   GifDataEntity? giphySearchAlbum;
+  List<String> favGif = [];
   // AT.User? user;
   int offset = 0;
   int limit = giphsPerPage;
@@ -39,6 +42,7 @@ class GiphsModel extends BaseModel {
     }
     offset += 1;
     limit += giphsPerPage;
+    updateFavGifList();
     notifyListeners();
   }
 
@@ -60,16 +64,46 @@ class GiphsModel extends BaseModel {
     notifyListeners();
   }
 
-  addFav(String gif) {
-    FirebaseFirestore.instance
-        .collection('fav_gaphy')
-        .add({'user_email': user.email, 'gif': gif});
+  addFav(String gif, {String? id}) async {
+    await FirebaseFirestore.instance
+        .collection('fav_giphy')
+        .add({'user_email': user.email, 'gif': gif, 'gif_id': id, 'delete': 0});
+    updateFavGifList();
+  }
+
+  removeFav(String? id) async {
+    await FirebaseFirestore.instance
+        .collection('fav_giphy')
+        .where('user_email', isEqualTo: user.email)
+        .where('gif_id', isEqualTo: id)
+        .get()
+        .then((onValue) {
+      onValue.docs.forEach((doc) async {
+        await doc.reference.delete();
+      });
+    });
+    updateFavGifList();
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> fetchFavGif() {
     return FirebaseFirestore.instance
-        .collection('fav_gaphy')
+        .collection('fav_giphy')
         .where('user_email', isEqualTo: user.email)
         .snapshots();
+  }
+
+  updateFavGifList([BuildContext? context]) async {
+    favGif.clear();
+    await FirebaseFirestore.instance
+        .collection('fav_giphy')
+        .where('user_email', isEqualTo: user.email)
+        .get()
+        .then((onValue) {
+      print("Fav :- ${onValue.docChanges.length}");
+      onValue.docChanges.forEach((element) {
+        favGif.add(element.doc.data()?["gif_id"]);
+      });
+    });
+    notifyListeners();
   }
 }

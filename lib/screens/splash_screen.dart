@@ -3,7 +3,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:giphy_app_test/screens/register_screen.dart';
-import 'package:giphy_app_test/screens/fav_gif_screen.dart';
 
 import '../data/model/gif_data_model.dart';
 import 'trending_screen.dart';
@@ -12,7 +11,6 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SplashScreenState createState() => _SplashScreenState();
 }
 

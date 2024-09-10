@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:giphy_app_test/screens/fav_gif_screen.dart';
 
 import '../main.dart';
 import 'trending_screen.dart';
@@ -47,14 +46,20 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState?.validate() ?? false) {
       // If the form is valid, proceed with login logic
 
-      await signInWithEmail(context);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const TrendingPage()),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Logging in...')),
-      );
+      UserCredential? userCredential = await signInWithEmail(context);
+      if (userCredential?.credential != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const TrendingPage()),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Logging in...')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid credential...')),
+        );
+      }
 
       // Implement login logic here
     }
@@ -68,12 +73,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool viewPassword = false;
 
-  signInWithEmail(context) async {
+  Future<UserCredential?> signInWithEmail(context) async {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
+      return userCredential;
     } on FirebaseAuthException catch (e) {
       debugPrint('error------${e.stackTrace}');
       debugPrint('stack--------${e.code}');

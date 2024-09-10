@@ -1,46 +1,32 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:giphy_app_test/screens/login_screen.dart';
-import 'package:giphy_app_test/screens/fav_gif_screen.dart';
 
-import '../main.dart';
 import 'trending_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  // Global key for the form
   final _formKey = GlobalKey<FormState>();
 
-  // Text controllers to retrieve input values
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  // Function to handle form submission
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Form is valid, proceed with signup logic
-      print("Email: ${_emailController.text}");
-      print("Password: ${_passwordController.text}");
       hitSignUpEmailAPI(context);
     }
   }
 
   hitSignUpEmailAPI(context) async {
     try {
-      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      ); // userCredential.user!.sendEmailVerification();
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Register successfully.")));
       Navigator.pushReplacement(
