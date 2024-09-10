@@ -13,7 +13,7 @@ Navigate to the directory where you want to clone the project.
 
 Run the following command to clone the repository:
 Copy code
-git clone https://github.com/your-username/your-flutter-project.git
+git clone https://github.com/ansh0930/Giphy-App-Test.git
 Install Dependencies
 Run the following command to get the project's dependencies:
 flutter pub get
