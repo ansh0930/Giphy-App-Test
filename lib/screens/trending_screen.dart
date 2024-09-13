@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:giphy_app_test/screens/fav_gif_screen.dart';
+import 'package:giphy_app_test/screens/login_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -43,6 +45,21 @@ class _TrendingPageState extends State<TrendingPage> {
         showButtomLoader = false;
       }
     });
+  }
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _logout() async {
+    try {
+      await _auth.signOut();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+      print('User signed out');
+    } catch (e) {
+      print('Error signing out: $e');
+    }
   }
 
   var children = <Widget>[];
@@ -90,15 +107,21 @@ class _TrendingPageState extends State<TrendingPage> {
                             onTap: () async {
                               addFavGif(element);
                             },
-                            child: Icon(
-                              Icons.favorite,
-                              size: 30,
-                              color: context
-                                      .read<GiphsModel>()
-                                      .favGif
-                                      .contains(element.id)
-                                  ? Colors.red
-                                  : Colors.white,
+                            child: Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(200),
+                                  color: Colors.black.withOpacity(0.3)),
+                              child: Icon(
+                                Icons.favorite,
+                                size: 25,
+                                color: context
+                                        .read<GiphsModel>()
+                                        .favGif
+                                        .contains(element.id)
+                                    ? Colors.red
+                                    : Colors.white,
+                              ),
                             ),
                           ),
                         )
@@ -127,20 +150,40 @@ class _TrendingPageState extends State<TrendingPage> {
             TextButton(
                 child: const Text(
                   'Trending',
-                  style: TextStyle(color: clearButtontextColor),
+                  style: TextStyle(color: Colors.deepPurple),
                 ),
                 onPressed: () {
                   isSearchQuery = false;
                   scrollController.jumpTo(0);
                 }),
+            SizedBox(
+                width: 25,
+                child: IconButton(
+                    onPressed: () {
+                      _logout();
+                    },
+                    icon: Icon(
+                      Icons.logout,
+                      color: Colors.red,
+                    ))),
+            SizedBox(
+              width: 15,
+            )
           ],
-          title: TextField(
-            onChanged: (value) {
-              isSearchQuery = true;
-              searchQuery = value;
-              model.searchImages(value);
-              scrollController.jumpTo(0);
-            },
+          title: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.black)),
+            height: 40,
+            child: SearchBar(
+              hintText: "Search",
+              onChanged: (value) {
+                isSearchQuery = true;
+                searchQuery = value;
+                model.searchImages(value);
+                scrollController.jumpTo(0);
+              },
+            ),
           ),
           backgroundColor: appBarColor,
           centerTitle: true,
@@ -150,7 +193,7 @@ class _TrendingPageState extends State<TrendingPage> {
             context,
             MaterialPageRoute(builder: (context) => const FavGifScreen()),
           ),
-          child: const SizedBox(
+          child: SizedBox(
             height: 80,
             child: Column(
               children: [

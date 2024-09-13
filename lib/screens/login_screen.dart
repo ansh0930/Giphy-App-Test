@@ -14,6 +14,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController forgetEmailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -45,17 +47,19 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _submit() async {
     if (_formKey.currentState?.validate() ?? false) {
       // If the form is valid, proceed with login logic
-
-      UserCredential? userCredential = await signInWithEmail(context);
-      if (userCredential?.credential != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const TrendingPage()),
+      try {
+        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
         );
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Logging in...')),
         );
-      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const TrendingPage()),
+        );
+      } catch (e, trace) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid credential...')),
         );
@@ -89,24 +93,30 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('Login'),
+        ],
+      )),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder(),),
                 keyboardType: TextInputType.emailAddress,
                 validator: validateEmail,
               ),
               const SizedBox(height: 16.0),
               TextFormField(
                 controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
+                decoration: const InputDecoration(labelText: 'Password', border: OutlineInputBorder(),),
                 obscureText: true,
                 validator: validatePassword,
               ),
