@@ -146,6 +146,7 @@ class _TrendingPageState extends State<TrendingPage> {
 
       return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           actions: [
             TextButton(
                 child: const Text(
